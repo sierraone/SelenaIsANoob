@@ -3,6 +3,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 public class GPACalculator {
 	/**
@@ -69,6 +70,15 @@ public class GPACalculator {
 		  JButton addrow=new JButton("Add Row");
 		  JButton deleterow=new JButton("Delete Row");
 		  
+		  calculate.addActionListener(new ActionListener() 
+		  {
+			 @Override
+			 public void actionPerformed(ActionEvent event)
+			 {
+				 System.out.println(Arrays.deepToString(getData(table)));
+			 }
+			 
+		  });
 		  addrow.addActionListener(new ActionListener()
 				  		{
 				  			@Override
@@ -156,6 +166,16 @@ public class GPACalculator {
 		panel1.add(panel3,c);
 		frame.setVisible(true);
 
+	}
+	
+	public Object[][] getData (JTable table) {
+		    DefaultTableModel dtm = (DefaultTableModel) table.getModel();
+		    int nRow = dtm.getRowCount(), nCol = dtm.getColumnCount();
+		    Object[][] tableData = new Object[nRow][nCol];
+		    for (int i = 0 ; i < nRow ; i++)
+		        for (int j = 0 ; j < nCol ; j++)
+		            tableData[i][j] = dtm.getValueAt(i,j);
+		    return tableData;
 	}
 	public static void addTableRow(JTable table) {
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
