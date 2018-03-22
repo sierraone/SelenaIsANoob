@@ -21,7 +21,8 @@ public class GPACalculator {
 		 */
 		JFrame frame=new JFrame("GPA Calculator");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(650, 700);
+		frame.setSize(600, 600);
+		frame.setMinimumSize(new Dimension(600,600));
 		frame.setLayout(new BorderLayout());
 
 		/**
@@ -38,7 +39,7 @@ public class GPACalculator {
 		/**
 		 * Jtable
 		 */
-		String[] colHeadings = {"Course","Credit","Grade"," Reset Row"};
+		String[] colHeadings = {"Course","Credit","Grade"};
 		int numRows = 5 ;
 		DefaultTableModel model = new DefaultTableModel(numRows, colHeadings.length) ;
 		model.setColumnIdentifiers(colHeadings);
@@ -61,49 +62,24 @@ public class GPACalculator {
 
 
 		/**
-		 * calculate button for panel2
+		 * buttons for panel2
 		 */
 		JButton calculate=new JButton("Calculate");
-		c.fill = GridBagConstraints.VERTICAL;
-		c.gridx = 0;
-		c.gridy = 0;
-		panel2.add(calculate, c);
-
-		/**
-		 * reset all button for panel2
-		 */
 		JButton reset=new JButton("Reset all");
-		c.fill = GridBagConstraints.VERTICAL;
-		c.gridx = 0;
-		c.gridy = 1;
-		panel2.add(reset, c);
-
-		/**
-		 * quick add button for panel2
-		 */
-		JButton quickadd=new JButton("Reset all");
-		c.fill = GridBagConstraints.VERTICAL;
-		c.gridx = 0;
-		c.gridy = 2;
-		panel2.add(quickadd, c);
-
-		/**
-		 * add row button for panel2
-		 */
+		JButton quickadd=new JButton("Quick Add");
 		JButton addrow=new JButton("Add Row");
-		c.fill = GridBagConstraints.VERTICAL;
-		c.gridx = 0;
-		c.gridy = 3;
-		panel2.add(addrow,c);
+		JButton deleterow=new JButton("Delete Row");
 
 		/**
-		 * add delete button for panel2
+		 * adding buttons to panel2
 		 */
-		JButton deleterow=new JButton("Add Row");
-		c.fill = GridBagConstraints.VERTICAL;
-		c.gridx = 0;
-		c.gridy = 4;
-		panel2.add(deleterow,c);
+		panel2.add(calculate);
+		panel2.add(reset);
+		panel2.add(quickadd);
+		panel2.add(addrow);
+		panel2.add(deleterow);
+
+
 
 		/**
 		 * comments for panel3
@@ -119,16 +95,10 @@ public class GPACalculator {
 		JLabel requiredgpa = new JLabel("Required GPA:     ");
 
 		/**
-		 * text field for panel3
-		 */
-		JTextField targettextfield=new JTextField(5);
-
-		/**
 		 * adding labels and comments to panel3
 		 */
 		panel3.add(currentgpa);
 		panel3.add(targetgpa);
-		panel3.add(targettextfield);
 		panel3.add(requiredgpa);
 		panel3.add(comments);
 
