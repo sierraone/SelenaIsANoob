@@ -24,7 +24,7 @@ public class GPACalculator {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(650, 700);
 		frame.setLayout(new FlowLayout());
-		JPanel p=new JPanel();
+		JPanel panel1=new JPanel();
 
 
 		/**
@@ -36,12 +36,7 @@ public class GPACalculator {
 		model.setColumnIdentifiers(colHeadings);
 		JTable table = new JTable(model);
 		JScrollPane scroll = new JScrollPane(table);
-		
-		/**
-		 * add table and scroll to panel
-		 */
-		p.add(table);
-		p.add(scroll);
+		panel1.add(scroll);
 
 		/**
 		 * grade arrays
@@ -53,8 +48,8 @@ public class GPACalculator {
 		/**
 		 * panel at the bottom
 		 */
-		JPanel pbottom=new JPanel();
-		pbottom.setLayout(new BoxLayout(pbottom, BoxLayout.LINE_AXIS ));
+		JPanel panel2=new JPanel();
+		panel2.setLayout(new BoxLayout(panel2, BoxLayout.LINE_AXIS ));
 		JButton calculate=new JButton("Calculate");
 		JLabel currentgpa = new JLabel("Current GPA:      ");
 		JLabel targetgpa = new JLabel("Target GPA: ");
@@ -71,22 +66,22 @@ public class GPACalculator {
 		/**
 		 * adding labels,textfield, and button to pbottom
 		 */
-		pbottom.add(calculate);
-		pbottom.add(currentgpa);
-		pbottom.add(targetgpa);
-		pbottom.add(target);
-		pbottom.add(requiredgpa);
-		pbottom.add(a);
-		pbottom.add(reset);
-		pbottom.add(a15);
-		pbottom.add(a1);
-		pbottom.add(d1);
+		panel2.add(calculate);
+		panel2.add(currentgpa);
+		panel2.add(targetgpa);
+		panel2.add(target);
+		panel2.add(requiredgpa);
+		panel2.add(a);
+		panel2.add(reset);
+		panel2.add(a15);
+		panel2.add(a1);
+		panel2.add(d1);
 
 		/**
 		 * add panel 1 and panel 2 to the frame
 		 */
-		frame.add(p,BorderLayout.NORTH);
-		frame.add(pbottom,BorderLayout.SOUTH);
+		frame.add(panel1,BorderLayout.NORTH);
+		frame.add(panel2,BorderLayout.SOUTH);
 		frame.setVisible(true);
 	}
 
