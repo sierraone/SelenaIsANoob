@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,28 +26,16 @@ public class GPACalculator {
 		f.setLayout(new FlowLayout());
 		JPanel p=new JPanel();
 
-		JTextField course1=new JTextField(7);
-		JTextField credit1=new JTextField(3);
-		JTextField grade1=new JTextField(3);
-		JButton reset1=new JButton("Reset");
-
-		JTextField course2=new JTextField(7);
-		JTextField credit2=new JTextField(3);
-		JTextField grade2=new JTextField(3);
-		JButton reset2=new JButton("Reset");
 
 		/**
 		 * Jtable
 		 */
-		String[] columnNames= {"Course","Credit Hour","Grade", "  "};
-		Object [][] data= {{course1,credit1,grade1,reset1},
-				{course2,credit2,grade2,reset2}
-		};
-		JTable table=new JTable(data,columnNames);
-		table.setPreferredScrollableViewportSize(new Dimension(500, 70));
-		table.setFillsViewportHeight(true);
-		p.add(table);
-
+		String[] colHeadings = {"Course","Credit","Grade"," Reset Row"};
+		int numRows = 15 ;
+		DefaultTableModel model = new DefaultTableModel(numRows, colHeadings.length) ;
+		model.setColumnIdentifiers(colHeadings);
+		JTable table = new JTable(model);
+		JScrollPane scroll = new JScrollPane(table);
 
 		/**
 		 * grade arrays
