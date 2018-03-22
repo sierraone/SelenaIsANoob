@@ -3,11 +3,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class c {
+public class GPACalculator {
 	/**
 	 * constructor of calculator
 	 */
-	public c(){
+	public GPACalculator(){
 		initialize(); 
 	}
 
@@ -98,7 +98,7 @@ public class c {
 	public static void main(String[] args) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				new c();
+				new GPACalculator();
 			}
 		});
 	}
