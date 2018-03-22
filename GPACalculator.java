@@ -19,11 +19,11 @@ public class GPACalculator {
 		/**
 		 * creating the JFrame
 		 */
-		JFrame f=new JFrame(" BoxLayout tutorial");
-		f.setTitle("GPA Calculator");
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setSize(650, 700);
-		f.setLayout(new FlowLayout());
+		JFrame frame=new JFrame();
+		frame.setTitle("GPA Calculator");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(650, 700);
+		frame.setLayout(new FlowLayout());
 		JPanel p=new JPanel();
 
 
@@ -31,11 +31,17 @@ public class GPACalculator {
 		 * Jtable
 		 */
 		String[] colHeadings = {"Course","Credit","Grade"," Reset Row"};
-		int numRows = 15 ;
+		int numRows = 5 ;
 		DefaultTableModel model = new DefaultTableModel(numRows, colHeadings.length) ;
 		model.setColumnIdentifiers(colHeadings);
 		JTable table = new JTable(model);
 		JScrollPane scroll = new JScrollPane(table);
+		
+		/**
+		 * add table and scroll to panel
+		 */
+		p.add(table);
+		p.add(scroll);
 
 		/**
 		 * grade arrays
@@ -79,9 +85,9 @@ public class GPACalculator {
 		/**
 		 * add panel 1 and panel 2 to the frame
 		 */
-		f.add(p,BorderLayout.NORTH);
-		f.add(pbottom,BorderLayout.SOUTH);
-		f.setVisible(true);
+		frame.add(p,BorderLayout.NORTH);
+		frame.add(pbottom,BorderLayout.SOUTH);
+		frame.setVisible(true);
 	}
 
 	public static void main(String[] args) {
