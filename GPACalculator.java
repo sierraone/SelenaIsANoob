@@ -97,12 +97,13 @@ public class GPACalculator {
 		/**
 		 * Elements are added to Panel2 (Side Bar)
 		 */
-			
-		panel2.add(calculateButton);
-		panel2.add(resetButton);
-		panel2.add(quickAddButton);
 		panel2.add(addRowButton);
+		panel2.add(quickAddButton);
 		panel2.add(deleteRowButton);
+		panel2.add(resetButton);
+		panel2.add(calculateButton);
+		
+		
 
 		//disable some buttons on startup
 		emptyToggle(true);
@@ -168,27 +169,23 @@ public class GPACalculator {
 					currentGPAText.setText(String.format("%.2f",(currentGPA)));
 					if (!targetInput.getText().isEmpty()) {
 					double targetGPA = Double.parseDouble(targetInput.getText().toString());
-					if (currentGPA>=targetGPA) {
-						commentText.setText("Congratulations! You've reached your GPA goal!");
-					}
-					else
-					{
+					
 						double requiredGPA = (targetGPA*(currentCredits+futureCredits)-currentGPA*(currentCredits))/futureCredits; 
 						requiredGPAText.setText(String.format("%.2f",requiredGPA));
-						if (requiredGPA<=2.0) {
-							commentText.setText("You can maybe take fewer credits if you wish.");
+						if (requiredGPA<2.0) {
+							commentText.setText("Congrats! You can choose to take fewer credits.");
 						}
 						else if(requiredGPA>4.0) {
 							commentText.setText("Required GPA is above 4.0, add more credits and recalculate.");
 						}
 						else {
-							commentText.setText("You need a perfect 4.0 to reach your goal!");
+							commentText.setText("Work hard and you'll get there!");
 						}
 					}
 				}
 				}
 
-			}
+			
 		});
 
 		/**
@@ -249,14 +246,11 @@ public class GPACalculator {
 	
 	/**
 	 * Setter for comments
-	 * This method is overloaded so specifying color is not required
 	 */
-	public void setComment(String commentText) {
-		setComment(commentText, Color.black);
-	}
-	public void setComment(String comment, Color color) {
+
+	public void setComment(String comment) {
 		commentText.setText(comment);
-		commentText.setForeground(color);
+
 	}
 	
 	/**
@@ -274,7 +268,7 @@ public class GPACalculator {
 		{
 			if (isMissing(row)) 
 			{
-				setComment("One or more rows is missing field \"Credit Hours\"",Color.red);
+				setComment("One or more rows is missing \"Credit Hours\"!");
 				return true;
 			}
 		}
