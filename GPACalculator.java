@@ -53,14 +53,39 @@ public class GPACalculator {
 		JScrollPane scroll = new JScrollPane(table);
 		panel1.add(scroll);
 
+
 		/**
-		 * grade arrays
+		 * comments for panel3
 		 */
-		String[] gradeoptions = {"A+","A","A-","B+","B","B-","C+","C","C-",
-				"D+","D","D-"};
-		double[] gradeoptions2= {4.0,4.0,3.7,3.3,3,2.7,2.3,2,1.7,1.3,1,0.7,0};
+		String comment="";
+		JLabel comments= new JLabel("Advice:  "+comment);
 
+		/**
+		 * text box for panel3
+		 */
+		JTextField a=new JTextField();
+		
+		/**
+		 * labels for panel3
+		 */
+		JLabel currentgpa = new JLabel("Current GPA:     "+" ");
+		JLabel targetgpa = new JLabel("Target GPA: ");
+		JLabel requiredgpa = new JLabel("Required GPA:     ");
+		JLabel instruction=new JLabel("Instructions:");
+		JLabel instruction1=new JLabel("1.Click on the table above to add courses.");
+		JLabel instruction2=new JLabel("2.Manually add rows after reseting all.");
 
+		/**
+		 * adding labels and comments to panel3
+		 */
+		panel3.add(currentgpa);
+		panel3.add(targetgpa);
+		panel3.add(a);
+		panel3.add(requiredgpa);
+		panel3.add(comments);
+		panel3.add(instruction);
+		panel3.add(instruction1);
+		panel3.add(instruction2);
 		/**
 		 * buttons for panel2
 		 */
@@ -79,28 +104,72 @@ public class GPACalculator {
 		panel2.add(addrow);
 		panel2.add(deleterow);
 
+		/**
+		 * add row action listener
+		 */
+		addrow.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent event)
+			{
+				addTableRow(table);
 
+			}
+		});
 
 		/**
-		 * comments for panel3
+		 * delete row action listener
 		 */
-		String comment="";
-		JLabel comments= new JLabel("Advice:  "+comment);
+		deleterow.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent event)
+			{
+				deleterow(table);
+
+			}
+		});
 
 		/**
-		 * labels for panel3
+		 * quick add action listener
 		 */
-		JLabel currentgpa = new JLabel("Current GPA:     ");
-		JLabel targetgpa = new JLabel("Target GPA: ");
-		JLabel requiredgpa = new JLabel("Required GPA:     ");
+		quickadd.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent event)
+			{
+				quickadd(table);
+
+			}
+		});
 
 		/**
-		 * adding labels and comments to panel3
+		 *  reset all action listener
 		 */
-		panel3.add(currentgpa);
-		panel3.add(targetgpa);
-		panel3.add(requiredgpa);
-		panel3.add(comments);
+		reset.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent event)
+			{
+				resetall(table);
+
+			}
+		});
+
+		/**
+		 * calculate action listener
+		 */
+		calculate.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent event)
+			{
+				calculate(table);
+				currentgpa.setText("Current GPA:     "+calculate(table));
+
+			}
+		});
+
 
 		/**
 		 * add panel1 to the frame, and panel2 and panel3 to panel1
@@ -113,8 +182,195 @@ public class GPACalculator {
 		c.gridy = 2;
 		panel1.add(panel3,c);
 		frame.setVisible(true);
+		
+		/**
+		 * to calculate required gpa
+		 */
+		double target=Double.parseDouble(a.getText());
+		double required=target-calculate(table);
+		//if required is more than 4.0
+		if (required>4.0) {
+			comment="Try adding more credit hours and recalculating";
+			comments.setText("Advice:  "+comment);
+		}
+		//if require is less than 2 
+		if (required<2.0) {
+			comment="Take fewer credit hours if they wish.";
+			comments.setText("Advice:  "+comment);
+		}
+		
 	}
 
+	/**
+	 * add row method
+	 */
+	public static void addTableRow(JTable table) {
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		model.addRow(new Object[]{"", "", ""});
+	}
+
+	/**
+	 * delete row method
+	 */
+	public void deleterow(JTable table){
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		int[] rows = table.getSelectedRows();
+		for(int i=0;i<rows.length;i++){
+			model.removeRow(rows[i]-i);
+		}
+	}
+
+	/**
+	 * quick add method
+	 */
+	public static void quickadd(JTable table) {
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		for (int i=0;i<15;i++) {
+			model.addRow(new Object[]{"", "", ""});
+		}
+	}
+
+	/**
+	 * reset all method
+	 */
+	public static void resetall(JTable table) {
+		DefaultTableModel dm = (DefaultTableModel) table.getModel();
+		int rowCount = dm.getRowCount();
+		for (int i = rowCount - 1; i >= 0; i--) {
+			dm.removeRow(i);
+		}
+	}
+
+	/**
+	 * method for getting all the data
+	 */
+	public Object[][] getalldata (JTable table) {
+		DefaultTableModel dtm = (DefaultTableModel) table.getModel();
+		int nRow = dtm.getRowCount(), nCol = dtm.getColumnCount();
+		Object[][] tableData = new Object[nRow][nCol];
+		for (int i = 0 ; i < nRow ; i++)
+			for (int j = 0 ; j < nCol ; j++)
+				tableData[i][j] = dtm.getValueAt(i,j);
+
+		return tableData;
+	}
+
+
+	/**
+	 * calculating GPA
+	 */
+	public double calculate (JTable table) {
+		int nRow = table.getModel().getRowCount();
+		double totalgrade=0;
+		double totalcredit=0;
+		double currentGPA=0;
+		for (int i=0;i<nRow;i++) {
+			/**
+			 * if the grade is A+ or A
+			 */
+			if(table.getModel().getValueAt(i,3).equals("A+")||table.getModel().getValueAt(i,3).equals("A")) {
+				int credit=(Integer) table.getModel().getValueAt(i,2);
+				totalcredit+=credit;
+				totalgrade=credit*4.0;
+			}
+			
+			/**
+			 * if the grade is A-
+			 */
+			if(table.getModel().getValueAt(i,3).equals("A-")){
+				int credit=(Integer) table.getModel().getValueAt(i,2);
+				totalcredit+=credit;
+				totalgrade=credit*3.7;
+			}
+			/**
+			 * if the grade is B+
+			 */
+			if(table.getModel().getValueAt(i,3).equals("B+")) {
+				int credit=(Integer) table.getModel().getValueAt(i,2);
+				totalcredit+=credit;
+				totalgrade=credit*3.3;
+			}
+			/**
+			 * if the grade is B
+			 */
+			if(table.getModel().getValueAt(i,3).equals("B")) {
+				int credit=(Integer) table.getModel().getValueAt(i,2);
+				totalcredit+=credit;
+				totalgrade=credit*3.0;
+			}
+			/**
+			 * if the grade is B-
+			 */
+			if(table.getModel().getValueAt(i,3).equals("B-")) {
+				int credit=(Integer) table.getModel().getValueAt(i,2);
+				totalcredit+=credit;
+				totalgrade=credit*2.7;
+			}
+			/**
+			 * if the grade is C+
+			 */
+			if(table.getModel().getValueAt(i,3).equals("C+")) {
+				int credit=(Integer) table.getModel().getValueAt(i,2);
+				totalcredit+=credit;
+				totalgrade=credit*2.3;
+			}
+			/**
+			 * if the grade is C
+			 */
+			if(table.getModel().getValueAt(i,3).equals("C")) {
+				int credit=(Integer) table.getModel().getValueAt(i,2);
+				totalcredit+=credit;
+				totalgrade=credit*2.0;
+			}
+			/**
+			 * if the grade is C-
+			 */
+			if(table.getModel().getValueAt(i,3).equals("C-")) {
+				int credit=(Integer) table.getModel().getValueAt(i,2);
+				totalcredit+=credit;
+				totalgrade=credit*1.7;
+			}
+			/**
+			 * if the grade is D+
+			 */
+			if(table.getModel().getValueAt(i,3).equals("D+")) {
+				int credit=(Integer) table.getModel().getValueAt(i,2);
+				totalcredit+=credit;
+				totalgrade=credit*1.3;
+			}
+			/**
+			 * if the grade is D
+			 */
+			if(table.getModel().getValueAt(i,3).equals("D")) {
+				int credit=(Integer) table.getModel().getValueAt(i,2);
+				totalcredit+=credit;
+				totalgrade=credit*1.0;
+			}
+			/**
+			 * if the grade is D-
+			 */
+			if(table.getModel().getValueAt(i,3).equals("D-")) {
+				int credit=(Integer) table.getModel().getValueAt(i,2);
+				totalcredit+=credit;
+				totalgrade=credit*0.7;
+			}
+			/**
+			 * if the grade is F
+			 */
+			if(table.getModel().getValueAt(i,3).equals("F")) {
+				int credit=(Integer) table.getModel().getValueAt(i,2);
+				totalcredit+=credit;
+				totalgrade=credit*0.0;
+			}
+		}
+		currentGPA=totalgrade/totalcredit;
+		return currentGPA;
+	}
+
+
+	/**
+	 *main method
+	 */
 	public static void main(String[] args) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
