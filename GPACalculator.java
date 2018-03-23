@@ -1,4 +1,3 @@
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
@@ -7,21 +6,27 @@ import java.awt.event.*;
 import java.util.*;
 
 public class GPACalculator {
-	JLabel commentLabel= new JLabel("Advice:");
-	JLabel comments= new JLabel();
-	JTextField goalInput=new JTextField();
-	JLabel currentgpa = new JLabel();
-	JLabel currentgpaLabel = new JLabel("Current GPA:");
-	JLabel targetgpa = new JLabel("Target GPA:");
-	JLabel requiredgpa = new JLabel("Required GPA:");
-	JButton calculate=new JButton("Calculate");
-	JButton reset=new JButton("Reset All");
-	JButton quickadd=new JButton("Quick Add");
-	JButton addrow=new JButton("Add Row");
-	JButton deleterow=new JButton("Delete Row");
+	/**
+	 * Create all elements in the frame, including an arrayList with the letter grades.
+	 */
+	JLabel commentLabel= new JLabel("Tips:");
+	JLabel commentText= new JLabel();
+	JTextField targetInput=new JTextField();
+	JLabel currentGPAText = new JLabel();
+	JLabel currentGPALabel = new JLabel("Current GPA:");
+	JLabel targetGPALabel = new JLabel("Target GPA:");
+	JLabel requiredGPALabel = new JLabel("Required GPA:");
+	JLabel requiredGPAText = new JLabel();
+	JButton calculateButton=new JButton("Calculate");
+	JButton resetButton=new JButton("Reset All");
+	JButton quickAddButton=new JButton("Quick Add");
+	JButton addRowButton=new JButton("Add Row");
+	JButton deleteRowButton=new JButton("Delete Row");
 	String[] letters = {"A","A-","B+","B","B-","C+","C","C-","D+","D","D-","F"};
 	double[] values = {4,3.7,3.3,3,2.7,2.3,2,1.7,1.3,1,0.7,0};
 	ArrayList<String> letterGrades = new ArrayList<>(Arrays.asList(letters));
+	int futureCredits = 0;
+	int currentCredits = 0;
 	/**
 	 * Calculator constructor
 	 */
@@ -33,74 +38,79 @@ public class GPACalculator {
 	 * Initialization
 	 * 
 	 * JFrame and 3 panels are created with corresponding layouts.
-	 * JTable is created using a DefaultTableModel
+	 * JTable is created using a DefaultTableModel.
+	 * Minimum size set to 600x600 to meet low-resolution requirements.
 	 */
 	public void initialize() {
 		//JFrame
-		JFrame frame=new JFrame("GPA Calculator");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(600, 600);
-		frame.setMinimumSize(new Dimension(600,600));
-		frame.setLayout(new BorderLayout());
+		JFrame calcFrame=new JFrame("GPA Calculator");
+		calcFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		calcFrame.setSize(600, 600);
+		calcFrame.setMinimumSize(new Dimension(600,600));
+		calcFrame.setLayout(new BorderLayout());
 		//JPanels
 		JPanel panel1=new JPanel();
 		panel1.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
 		JPanel panel2=new JPanel();
 		panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS ));
 		JPanel panel3=new JPanel();
 		panel3.setLayout(new GridBagLayout());
 		//JTable
 		String[] colHeadings = {"Course","Credit","Grade"};
-		int numRows = 0 ;
-		DefaultTableModel model = new DefaultTableModel(numRows, colHeadings.length) ;
+		DefaultTableModel model = new DefaultTableModel(0, colHeadings.length) ;
 		model.setColumnIdentifiers(colHeadings);
 		JTable table = new JTable(model);
-		c.gridx = 0;
-		c.gridy = 0;
+		GridBagConstraints gridConstraints = new GridBagConstraints();
+		gridConstraints.gridx = 0;
+		gridConstraints.gridy = 0;
 		JScrollPane scroll = new JScrollPane(table);
 		panel1.add(scroll);
 
 
 		/**
-		 * Elements are added to Panel3 (bottom aligned)
+		 * Elements are added to Panel3, with left alignment.
 		 */
-		c.gridx = 0;
-		c.gridy = 0;
-		c.anchor = GridBagConstraints.LINE_START;
-		panel3.add(currentgpaLabel,c);
-		c.gridx = 1;
-		panel3.add(currentgpa,c);
-		c.gridx = 0;
-		c.gridy = 1;
-		panel3.add(targetgpa,c);
-		c.gridx = 1;
-		panel3.add(goalInput,c);
-		goalInput.setColumns(3);
-		c.gridy = 2;
-		c.gridx = 0;
-		panel3.add(requiredgpa,c);
-		c.gridy = 3;
-		panel3.add(commentLabel,c);
-		c.gridx = 1;
-		panel3.add(comments,c);
+		gridConstraints.ipadx = 10;
+		gridConstraints.gridx = 0;
+		gridConstraints.gridy = 0;
+		gridConstraints.anchor = GridBagConstraints.LINE_START;
+		panel3.add(currentGPALabel,gridConstraints);
+		gridConstraints.gridx = 1;
+		panel3.add(currentGPAText,gridConstraints);
+		gridConstraints.gridx = 0;
+		gridConstraints.gridy = 1;
+		panel3.add(targetGPALabel,gridConstraints);
+		gridConstraints.gridx = 1;
+		panel3.add(targetInput,gridConstraints);
+		targetInput.setColumns(3);
+		gridConstraints.gridy = 2;
+		gridConstraints.gridx = 0;
+		panel3.add(requiredGPALabel,gridConstraints);
+		gridConstraints.gridx = 1;
+		panel3.add(requiredGPAText,gridConstraints);
+		gridConstraints.gridy = 3;
+		gridConstraints.gridx = 0;
+		panel3.add(commentLabel,gridConstraints);
+		gridConstraints.gridx = 1;
+		panel3.add(commentText,gridConstraints);
 		
 		/**
 		 * Elements are added to Panel2 (Side Bar)
 		 */
-		
+			
+		panel2.add(calculateButton);
+		panel2.add(resetButton);
+		panel2.add(quickAddButton);
+		panel2.add(addRowButton);
+		panel2.add(deleteRowButton);
+
+		//disable some buttons on startup
 		emptyToggle(true);
 		
-		panel2.add(calculate);
-		panel2.add(reset);
-		panel2.add(quickadd);
-		panel2.add(addrow);
-		panel2.add(deleterow);
-
 		/**
 		 * Action Listeners for all Buttons in Panel2
 		 */
-		addrow.addActionListener(new ActionListener()
+		addRowButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent event)
@@ -111,7 +121,7 @@ public class GPACalculator {
 			}
 		});
 
-		deleterow.addActionListener(new ActionListener()
+		deleteRowButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent event)
@@ -121,7 +131,7 @@ public class GPACalculator {
 			}
 		});
 
-		quickadd.addActionListener(new ActionListener()
+		quickAddButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent event)
@@ -132,7 +142,7 @@ public class GPACalculator {
 			}
 		});
 
-		reset.addActionListener(new ActionListener()
+		resetButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent event)
@@ -143,7 +153,7 @@ public class GPACalculator {
 			}
 		});
 
-		calculate.addActionListener(new ActionListener()
+		calculateButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent event)
@@ -152,12 +162,30 @@ public class GPACalculator {
 				if (editor != null) {
 				  editor.stopCellEditing();
 				}
-				double target = 0;
-				if (!goalInput.getText().isEmpty()) target=Double.parseDouble(goalInput.getText());
 				ArrayList<Object[]> data = getalldata(table);
 				if (!checkEmpty(data)) {
 					double currentGPA = calculate(data);
-					currentgpa.setText(String.format("%.2f",(currentGPA)));
+					currentGPAText.setText(String.format("%.2f",(currentGPA)));
+					if (!targetInput.getText().isEmpty()) {
+					double targetGPA = Double.parseDouble(targetInput.getText().toString());
+					if (currentGPA>=targetGPA) {
+						commentText.setText("Congratulations! You've reached your GPA goal!");
+					}
+					else
+					{
+						double requiredGPA = (targetGPA*(currentCredits+futureCredits)-currentGPA*(currentCredits))/futureCredits; 
+						requiredGPAText.setText(String.format("%.2f",requiredGPA));
+						if (requiredGPA<=2.0) {
+							commentText.setText("You can maybe take fewer credits if you wish.");
+						}
+						else if(requiredGPA>4.0) {
+							commentText.setText("Required GPA is above 4.0, add more credits and recalculate.");
+						}
+						else {
+							commentText.setText("You need a perfect 4.0 to reach your goal!");
+						}
+					}
+				}
 				}
 
 			}
@@ -167,15 +195,15 @@ public class GPACalculator {
 		 * Add Panel1 to JFrame
 		 * Add Panel2 and Panel3 to Panel1
 		 */
-		frame.add(panel1);
-		c.gridx = 2;
-		c.gridy = 0;
-		panel1.add(panel2,c);
-		c.gridx = 0;
-		c.gridy = 2;
-		c.anchor = GridBagConstraints.LAST_LINE_START;
-		panel1.add(panel3,c);
-		frame.setVisible(true);
+		calcFrame.add(panel1);
+		gridConstraints.gridx = 2;
+		gridConstraints.gridy = 0;
+		panel1.add(panel2,gridConstraints);
+		gridConstraints.gridx = 0;
+		gridConstraints.gridy = 2;
+		gridConstraints.anchor = GridBagConstraints.LAST_LINE_START;
+		panel1.add(panel3,gridConstraints);
+		calcFrame.setVisible(true);
 	}
 
 	/**
@@ -226,9 +254,9 @@ public class GPACalculator {
 	public void setComment(String commentText) {
 		setComment(commentText, Color.black);
 	}
-	public void setComment(String commentText, Color color) {
-		comments.setText(commentText);
-		comments.setForeground(color);
+	public void setComment(String comment, Color color) {
+		commentText.setText(comment);
+		commentText.setForeground(color);
 	}
 	
 	/**
@@ -236,9 +264,9 @@ public class GPACalculator {
 	 * Depending on the status (true for empty list, false otherwise) will set state of buttons.
 	 */
 	public void emptyToggle(boolean status) {
-		calculate.setEnabled(!status);
-		deleterow.setEnabled(!status);
-		reset.setEnabled(!status);
+		calculateButton.setEnabled(!status);
+		deleteRowButton.setEnabled(!status);
+		resetButton.setEnabled(!status);
 	}
 
 	public boolean checkEmpty(ArrayList<Object[]> data) {
@@ -274,12 +302,20 @@ public class GPACalculator {
 	 */
 	public Double calculate (ArrayList<Object[]> data) {
 		Double currentGPA=0.0;
-		int credithours=0;
+		currentCredits = 0;
+		futureCredits = 0;
 		for(int j=0;j<data.size();j++) {
+			if (!data.get(j)[2].toString().isEmpty()) {
 			currentGPA+=Double.parseDouble(data.get(j)[1].toString())*values[letterGrades.indexOf(data.get(j)[2])];
-			credithours+=Double.parseDouble(data.get(j)[1].toString());
+			currentCredits+=Double.parseDouble(data.get(j)[1].toString());
+			}
+			else {
+				futureCredits+=Double.parseDouble(data.get(j)[1].toString());
+			}
+			
+			
 		}
-		return (double) currentGPA/credithours;
+		return (double) currentGPA/currentCredits;
 	}
     public static boolean isMissing (Object[] row)
     {
