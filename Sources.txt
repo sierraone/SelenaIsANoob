@@ -1,0 +1,8 @@
+1. Arrays to ArrayList - https://www.geeksforgeeks.org/conversion-of-array-to-arraylist-in-java/
+2. JScroll to show table headers - https://stackoverflow.com/questions/13935934/java-jtable-column-headers-not-showing/13936925
+3. DefaultTableModel for getting data - https://stackoverflow.com/questions/11812142/how-to-get-data-from-a-jtable
+4. GridBagLayout - https://docs.oracle.com/javase/tutorial/uiswing/layout/gridbag.html
+5. Double to String - http://javadevnotes.com/java-double-to-string-examples
+6. Two decimal places - https://stackoverflow.com/questions/2538787/how-to-display-an-output-of-float-data-with-2-decimal-places-in-java/2538803
+7. Foreach - https://stackoverflow.com/questions/85190/how-does-the-java-for-each-loop-work
+
